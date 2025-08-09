@@ -12,12 +12,12 @@ export default function () {
 
   const url = pegarBaseUrl() + "/transferencias";
 
-  const payload = {
-    conta_origem: 1,
-    conta_destino: 2,
+  const payload = JSON.stringify({
+    contaOrigem: 1,
+    contaDestino: 2,
     valor: 11,
     token: "",
-  };
+  });
 
   const params = {
     headers: {
