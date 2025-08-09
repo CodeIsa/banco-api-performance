@@ -1,6 +1,8 @@
-import http from 'k6/http';
-import { sleep, check } from 'k6';
-const postlogin = JSON.parse(open('../fixtures/postLogin.json'));
+import http from "k6/http";
+import { sleep, check } from "k6";
+import { pegarBaseUrl } from "../utils/variaveis.js";
+
+const postlogin = JSON.parse(open("../fixtures/postLogin.json"));
 
 // This file is used to test the login endpoint of the application.
 // It simulates multiple users logging in concurrently to assess the performance of the login functionality.
@@ -17,29 +19,28 @@ export const options = {
   //duration: '30s', // Duration of the test
   iterations: 1, // Total number of iterations to run
   thresholds: {
-    http_req_duration: ['p(90)<3000', 'max<5000'],
-    http_req_failed: ['rate<0.01'],
+    http_req_duration: ["p(90)<3000", "max<5000"],
+    http_req_failed: ["rate<0.01"],
   },
 };
 
 export default function () {
-  const url = 'http://localhost:3000/login';
+  const url = pegarBaseUrl() + "/login";
 
   // Modify the username for each iteration to simulate different users
   //postlogin.username = 'junior.lima';
-  console.log(postlogin);
   const payload = JSON.stringify(postlogin);
 
   const params = {
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
   };
 
   const res = http.post(url, payload, params);
 
   check(res, {
-    'Validar que o status é 200': (r) => r.status === 200,
+    "Validar que o status é 200": (r) => r.status === 200,
   });
 
   sleep(1);
